@@ -27,7 +27,7 @@ pipeline {
     
         stage('Clone-code') {
             steps {
-                git branch: 'main', url: 'https://github.com/akoneru121/tweet-trend.git'
+                git branch: 'main', url: 'https://github.com/akoneru121/tweet-trend.git'"
             }
         }
     }
