@@ -25,10 +25,15 @@ pipeline {
             }
         }
     
-        stage('Clone-code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/akoneru121/tweet-trend.git'"
-            }
+        stage('SonarQube analysis') {
+        environment {
+        scannerHome = tool 'akoneru-sonar-scanner'
+        }
+        steps{
+        withSonarQubeEnv('akoneru-sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
+          sh "${scannerHome}/bin/sonar-scanner"
         }
     }
+  }
+}
 }
