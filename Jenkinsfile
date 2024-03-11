@@ -4,6 +4,10 @@ pipeline {
             label 'maven'
         }
     }
+
+        environment {
+        PATH = "/opt/apache-maven-3.9.4/bin:$PATH"
+        }
      stages {
         stage('Approval') {
             steps {
@@ -25,10 +29,6 @@ pipeline {
             }
         }
         
-        environment {
-        PATH = "/opt/apache-maven-3.9.4/bin:$PATH"
-        }
-       
         stage("build"){
             steps {
                  echo "----------- build started ----------"
