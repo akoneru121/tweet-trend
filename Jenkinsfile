@@ -1,3 +1,4 @@
+def registry = 'https://valaxy01.jfrog.io'
 pipeline {
     agent {
         node{
@@ -68,9 +69,11 @@ pipeline {
 }
 }
 
-  }
-         stage("Jar Publish") {
-        steps {
+  }   
+
+
+    stage("Jar Publish") {
+     steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
                      def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artfiact-cred"
@@ -95,3 +98,4 @@ pipeline {
         }   
     }   
 }
+
