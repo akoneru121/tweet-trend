@@ -55,8 +55,7 @@ pipeline {
         }
     }
   }
-  
-    stage("Quality Gate"){
+   stage("Quality Gate"){
     steps {
         script {
         timeout(time: 1, unit: 'SECONDS') { // Just in case something goes wrong, pipeline will be killed after a timeout
@@ -74,13 +73,13 @@ pipeline {
         steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
-                     def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artifactory_token"
+                     def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artifact-cred"
                      def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}";
                      def uploadSpec = """{
                           "files": [
                             {
                               "pattern": "jarstaging/(*)",
-                              "target": "libs-release-local/{1}",
+                              "target": "maven-local-dem00/{1}",
                               "flat": "false",
                               "props" : "${properties}",
                               "exclusions": [ "*.sha1", "*.md5"]
