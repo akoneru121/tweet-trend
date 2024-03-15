@@ -1,4 +1,6 @@
 def registry = 'https://akoneru122.jfrog.io'
+def imageName = 'akoneru122.jfrog.io/docker-trial/ttrend'
+def version   = '2.1.4'
 pipeline {
     agent {
         node{
@@ -69,7 +71,7 @@ pipeline {
 }
 
 
-         stage("Jar Publish") {
+    stage("Jar Publish") {
         steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
@@ -93,7 +95,29 @@ pipeline {
             
             }
         }   
-    }   
+    } 
+
+    stage(" Docker Build ") {
+      steps {
+        script {
+           echo '<--------------- Docker Build Started --------------->'
+           app = docker.build(imageName+":"+version)
+           echo '<--------------- Docker Build Ends --------------->'
+        }
+      }
+    }  
+
+    stage (" Docker Publish "){
+        steps {
+            script {
+               echo '<--------------- Docker Publish Started --------------->'  
+                docker.withRegistry(registry, 'artifact-cred'){
+                    app.push()
+                }    
+               echo '<--------------- Docker Publish Ended --------------->'  
+            }
+        }
+    }
 
 }
 }
