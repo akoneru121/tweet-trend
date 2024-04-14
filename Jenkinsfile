@@ -1,5 +1,5 @@
-def registry = 'https://akoneru122.jfrog.io'
-def imageName = 'akoneru122.jfrog.io/docker-trial/ttrend'
+def registry = 'https://astech05.jfrog.io'
+//def imageName = 'akoneru122.jfrog.io/docker-trial/ttrend'
 def version   = '2.1.4'
 pipeline {
     agent {
@@ -47,35 +47,12 @@ pipeline {
         //     }
         // }
 
-        stage('SonarQube analysis') {
-        environment {
-        scannerHome = tool 'akoneru-sonar-scanner'
-        }
-        steps{
-        withSonarQubeEnv('akoneru-sonarqube-server') { // If you have configured more than one global server connection, you can specify its name
-          sh "${scannerHome}/bin/sonar-scanner"
-        }
-    }
-  }
-   stage("Quality Gate"){
-    steps {
-        script {
-        timeout(time: 1, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
-    def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
-    if (qg.status != 'OK') {
-      error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    }
-  }
-        }
-    }
-}
-
 
     stage("Jar Publish") {
         steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
-                     def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"artifact-cred"
+                     def server = Artifactory.newServer url:registry+"/artifactory" ,  credentialsId:"1e0a6514-a1aa-4d09-a361-005f87be641f"
                      def properties = "buildid=${env.BUILD_ID},commitid=${GIT_COMMIT}";
                      def uploadSpec = """{
                           "files": [
@@ -111,7 +88,7 @@ pipeline {
         steps {
             script {
                echo '<--------------- Docker Publish Started --------------->'  
-                docker.withRegistry(registry, 'artifact-cred'){
+                docker.withRegistry(registry, '1e0a6514-a1aa-4d09-a361-005f87be641f'){
                     app.push()
                 }    
                echo '<--------------- Docker Publish Ended --------------->'  
